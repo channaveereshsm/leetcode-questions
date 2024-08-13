@@ -1,36 +1,28 @@
 class Solution {
-    public int lengthOfLongestSubsequence(List<Integer> nums, int t) {
-    
-     int dp[]=new int[t+1];
-     int sum=0;
-     for(int i=0;i<nums.size();i++)
-     {
-        int  x=nums.get(i);
-        int a[]=new int[t+1];
-        sum=sum+x;
-        if(x<=t)
-        {
-            
-            for(int j=x;j<=Math.min(sum,t);j++)
-            {
-                if(dp[j-x]!=0||j==x)
-                  a[j]=Math.max(dp[j],dp[j-x]+1);
-            }
-           for(int k=x;k<=Math.min(sum,t);k++)
-             dp[k]=Math.max(a[k],dp[k]);
+    int dp[][];
+    public int find(List<Integer> l,int target,int i)
+    {
+        if(target==0)
+        return 0;
+        if(i==l.size())
+        return -1000;
+        if(target<0)
+        return -1000;
+        int a=-1000;
+        if(dp[i][target]!=0)
+        return dp[i][target];
+        if(target>=l.get(i))
+        a=1+find(l,target-l.get(i),i+1);
+        a=Math.max(find(l,target,i+1),a);
+        return dp[i][target]=a;
 
-            
-        }
-        
-        
-
-        
-     }
-
-    
-     if(dp[t]==0)
-     return -1;
-     return dp[t];
-
+    }
+    public int lengthOfLongestSubsequence(List<Integer> nums, int target) {
+    Collections.sort(nums);
+    dp=new int[nums.size()+1][target+1];
+    int ans=find(nums,target,0);
+    if(ans<0)
+    return -1;
+    return ans;
     }
 }
